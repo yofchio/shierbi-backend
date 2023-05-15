@@ -2,23 +2,24 @@ package com.shier.shierbi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.common.ErrorCode;
+import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.mapper.PostThumbMapper;
 import com.shier.shierbi.model.entity.Post;
 import com.shier.shierbi.model.entity.PostThumb;
+import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.service.PostService;
 import com.shier.shierbi.service.PostThumbService;
-import javax.annotation.Resource;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 /**
  * 帖子点赞服务实现
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author Shier
  */
 @Service
 public class PostThumbServiceImpl extends ServiceImpl<PostThumbMapper, PostThumb>

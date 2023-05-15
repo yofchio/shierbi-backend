@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.shier.shierbi.common.ErrorCode;
 import com.shier.shierbi.constant.CommonConstant;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
-import com.shier.shierbi.common.ErrorCode;
 import com.shier.shierbi.mapper.PostFavourMapper;
 import com.shier.shierbi.mapper.PostMapper;
 import com.shier.shierbi.mapper.PostThumbMapper;
@@ -16,19 +16,12 @@ import com.shier.shierbi.model.dto.post.PostQueryRequest;
 import com.shier.shierbi.model.entity.Post;
 import com.shier.shierbi.model.entity.PostFavour;
 import com.shier.shierbi.model.entity.PostThumb;
+import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.vo.PostVO;
 import com.shier.shierbi.model.vo.UserVO;
 import com.shier.shierbi.service.PostService;
 import com.shier.shierbi.service.UserService;
 import com.shier.shierbi.utils.SqlUtils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -46,11 +39,15 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * 帖子服务实现
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author Shier
  */
 @Service
 @Slf4j

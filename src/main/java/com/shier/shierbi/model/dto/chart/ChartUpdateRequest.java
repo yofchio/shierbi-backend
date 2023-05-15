@@ -1,18 +1,20 @@
-package com.shier.shierbi.model.entity;
+package com.shier.shierbi.model.dto.chart;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 图表信息表
- * @TableName chart
+ * 更新请求
+ * @author Shier
  */
-@TableName(value ="chart")
 @Data
-public class Chart implements Serializable {
+public class ChartUpdateRequest implements Serializable {
+
     /**
      * id
      */
@@ -25,7 +27,7 @@ public class Chart implements Serializable {
     private String goal;
 
     /**
-     * 图表数据
+     * 图表信息
      */
     private String chartData;
 
@@ -65,6 +67,5 @@ public class Chart implements Serializable {
     @TableLogic
     private Integer isDelete;
 
-    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

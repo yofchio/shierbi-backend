@@ -1,9 +1,9 @@
 package com.shier.shierbi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.shier.shierbi.mapper.ChartMapper;
 import com.shier.shierbi.model.entity.Chart;
 import com.shier.shierbi.service.ChartService;
-import com.shier.shierbi.mapper.ChartMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 * @createDate 2023-05-14 19:20:33
 */
 @Service
-public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart>
-    implements ChartService{
+public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements ChartService{
 
 }
 

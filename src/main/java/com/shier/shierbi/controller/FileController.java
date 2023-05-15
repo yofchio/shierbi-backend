@@ -8,12 +8,9 @@ import com.shier.shierbi.constant.FileConstant;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.manager.CosManager;
 import com.shier.shierbi.model.dto.file.UploadFileRequest;
+import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.enums.FileUploadBizEnum;
 import com.shier.shierbi.service.UserService;
-import java.io.File;
-import java.util.Arrays;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.Arrays;
+
 /**
  * 文件接口
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author Shier
  */
 @RestController
 @RequestMapping("/file")

@@ -27,7 +27,7 @@ public class Knife4jConfig {
                 .apiInfo(apiInfo())
                 .select()
                 // 指定 Controller 扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.shier.shierusercenterbackend.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.shier.shierbi.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -40,7 +40,7 @@ public class Knife4jConfig {
                 // 接口文档的标题
                 .title("智能BI系统")
                 // 接口文档的描述信息
-                .description("用户（数据分析者）只需要导入最原始的数据集，输入想要进行分析的目标（比如帮我分析一下网站的增长趋势)，就能利用AI自动生成一个符合要求的图表以及分析结论。此外，还会有图表管理、异步生成等功能。")
+                .description("用户只需要导入最原始的数据集，输入想要进行分析的目标（比如帮我分析一下网站的增长趋势)，就能利用AI自动生成一个符合要求的图表以及分析结论。此外，还会有图表管理、异步生成等功能。")
                 // 提供服务的是谁？可以填写你自己的地址因为是你自己提供的服务
                 .termsOfServiceUrl("https://github.com/kongshier")
                 .contact(new Contact("Shier", "https://blog.csdn.net/qq_56098191", "2927527234@qq.com"))
