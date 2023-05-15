@@ -1,13 +1,15 @@
 package com.shier.shierbi.model.dto.user;
 
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * 用户更新请求
+ * 用户更新请求   管理员操作
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author Shier
  */
 @Data
 public class UserUpdateRequest implements Serializable {
@@ -15,6 +17,16 @@ public class UserUpdateRequest implements Serializable {
      * id
      */
     private Long id;
+
+    /**
+     * 账号
+     */
+    private String userAccount;
+
+    /**
+     * 密码
+     */
+    private String userPassword;
 
     /**
      * 用户昵称
@@ -27,14 +39,20 @@ public class UserUpdateRequest implements Serializable {
     private String userAvatar;
 
     /**
-     * 简介
-     */
-    private String userProfile;
-
-    /**
-     * 用户角色：user/admin/ban
+     * 用户角色：user/admin
      */
     private String userRole;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 是否删除
+     */
+    @TableLogic
+    private Integer isDelete;
 
     private static final long serialVersionUID = 1L;
 }

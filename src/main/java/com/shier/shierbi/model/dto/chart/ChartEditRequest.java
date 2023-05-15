@@ -11,6 +11,13 @@ import java.io.Serializable;
  */
 @Data
 public class ChartEditRequest implements Serializable {
+
+    /**
+     * 图表名称
+     */
+    private String chartName;
+
+
     /**
      * 修改对应图表id
      */

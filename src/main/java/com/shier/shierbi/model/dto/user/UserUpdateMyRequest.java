@@ -1,13 +1,12 @@
 package com.shier.shierbi.model.dto.user;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 用户更新个人信息请求
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @Data
 public class UserUpdateMyRequest implements Serializable {
@@ -23,9 +22,14 @@ public class UserUpdateMyRequest implements Serializable {
     private String userAvatar;
 
     /**
-     * 简介
+     * 用户账号
      */
-    private String userProfile;
+    private String userAccount;
+
+    /**
+     * 用户密碼
+     */
+    private String userPassword;
 
     private static final long serialVersionUID = 1L;
 }

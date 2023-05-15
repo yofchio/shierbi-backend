@@ -1,14 +1,13 @@
 package com.shier.shierbi.model.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户视图（脱敏）
- *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author Shier
  */
 @Data
 public class UserVO implements Serializable {
@@ -28,15 +27,16 @@ public class UserVO implements Serializable {
      */
     private String userAvatar;
 
-    /**
-     * 用户简介
-     */
-    private String userProfile;
 
     /**
-     * 用户角色：user/admin/ban
+     * 用户角色：user/admin
      */
     private String userRole;
+
+    /**
+     * 用户账号
+     */
+    private String userAccount;
 
     /**
      * 创建时间

@@ -29,6 +29,12 @@ public class Chart implements Serializable {
      */
     private String chartData;
 
+
+    /**
+     * 图表名称
+     */
+    private String chartName;
+
     /**
      * 图表类型
      */

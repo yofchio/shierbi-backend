@@ -11,19 +11,19 @@ import com.shier.shierbi.constant.CommonConstant;
 import com.shier.shierbi.constant.UserConstant;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
-import com.shier.shierbi.model.dto.chart.ChartAddRequest;
-import com.shier.shierbi.model.dto.chart.ChartEditRequest;
-import com.shier.shierbi.model.dto.chart.ChartQueryRequest;
-import com.shier.shierbi.model.dto.chart.ChartUpdateRequest;
+import com.shier.shierbi.model.dto.chart.*;
 import com.shier.shierbi.model.entity.Chart;
 import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.service.ChartService;
 import com.shier.shierbi.service.UserService;
+import com.shier.shierbi.utils.ExcelUtils;
 import com.shier.shierbi.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -141,7 +141,7 @@ public class ChartController {
      */
     @PostMapping("/list/page")
     public BaseResponse<Page<Chart>> listChartByPage(@RequestBody ChartQueryRequest chartQueryRequest,
-                                                       HttpServletRequest request) {
+                                                     HttpServletRequest request) {
         long current = chartQueryRequest.getCurrent();
         long size = chartQueryRequest.getPageSize();
         // 限制爬虫
@@ -159,7 +159,7 @@ public class ChartController {
      */
     @PostMapping("/my/list/page")
     public BaseResponse<Page<Chart>> listMyChartByPage(@RequestBody ChartQueryRequest chartQueryRequest,
-                                                         HttpServletRequest request) {
+                                                       HttpServletRequest request) {
         if (chartQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -172,7 +172,6 @@ public class ChartController {
         Page<Chart> chartPage = chartService.page(new Page<>(current, size), getQueryWrapper(chartQueryRequest));
         return ResultUtils.success(chartPage);
     }
-
 
     /**
      * 管理员编辑用户图表
@@ -217,6 +216,7 @@ public class ChartController {
 
         Long id = chartQueryRequest.getId();
         String goal = chartQueryRequest.getGoal();
+        String chartName = chartQueryRequest.getChartName();
         String chartType = chartQueryRequest.getChartType();
         Long userId = chartQueryRequest.getUserId();
         String sortField = chartQueryRequest.getSortField();
@@ -224,6 +224,7 @@ public class ChartController {
         // 根据前端传来条件进行拼接查询条件
         queryWrapper.eq(id != null && id > 0, "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(goal), "goal", goal);
+        queryWrapper.like(ObjectUtils.isNotEmpty(chartName), "chartName", chartName);
         queryWrapper.eq(ObjectUtils.isNotEmpty(chartType), "chartType", chartType);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
 
@@ -231,5 +232,51 @@ public class ChartController {
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
+    }
+
+    /**
+     * 文件上传
+     */
+    @PostMapping("/gen")
+    public BaseResponse<String> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
+                                             GenChartByAiRequest chartByAiRequest, HttpServletRequest request) {
+        String chartName = chartByAiRequest.getChartName();
+        String goal = chartByAiRequest.getGoal();
+        String chartType = chartByAiRequest.getChartType();
+        // 校验
+        ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "图表分析目标为空");
+        ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
+        ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
+
+        // 用户输入
+        StringBuilder userInput = new StringBuilder();
+        userInput.append("你是一个数据分析师，接下来我会给你我的分析目标和原始数据，请告诉我分析结论。").append("\n");
+        userInput.append("分析目标：").append(goal).append("\n");
+        // 压缩后的数据
+        String result = ExcelUtils.excelToCsv(multipartFile);
+        userInput.append("数据：").append(result).append("\n");
+        return ResultUtils.success(userInput.toString());
+
+        //// 读取用户上传的excel 进行处理
+        //User loginUser = userService.getLoginUser(request);
+        //// 文件目录：根据业务、用户来划分
+        //String uuid = RandomStringUtils.randomAlphanumeric(8);
+        //String filename = uuid + "-" + multipartFile.getOriginalFilename();
+        //File file = null;
+        //try {
+        //    // 返回可访问地址
+        //    return ResultUtils.success("");
+        //} catch (Exception e) {
+        //    //log.error("file upload error, filepath = " + filepath, e);
+        //    throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
+        //} finally {
+        //    if (file != null) {
+        //        // 删除临时文件
+        //        boolean delete = file.delete();
+        //        if (!delete) {
+        //            //log.error("file delete error, filepath = {}", filepath);
+        //        }
+        //    }
+        //}
     }
 }

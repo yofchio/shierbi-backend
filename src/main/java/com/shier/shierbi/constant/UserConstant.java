@@ -2,11 +2,13 @@ package com.shier.shierbi.constant;
 
 /**
  * 用户常量
- *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 public interface UserConstant {
+
+    /**
+     * 盐值，混淆密码
+     */
+    String SALT = "shier";
 
     /**
      * 用户登录态键
