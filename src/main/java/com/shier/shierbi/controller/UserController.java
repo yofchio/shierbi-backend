@@ -36,7 +36,7 @@ import static com.shier.shierbi.constant.UserConstant.SALT;
  * @author Shier
  */
 @RestController
-@Api(tags = "UserManage")
+@Api(tags = "UserController")
 @RequestMapping("/user")
 @Slf4j
 public class UserController {

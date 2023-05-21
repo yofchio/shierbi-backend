@@ -5,8 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author Shier
  * CreateTime 2023/5/21 10:48
@@ -19,7 +17,7 @@ class AiManagerTest {
 
     @Test
     void doChat() {
-        String doChat = aiManager.doChat(1660100329896673281L, "分析需求：\n" +
+        String doChat = aiManager.doChat( "分析需求：\n" +
                 "分析网站用户的增长情况\n" +
                 "原始数据：\n" +
                 "日期，用户数\n" +

@@ -11,6 +11,8 @@ import com.shier.shierbi.model.dto.file.UploadFileRequest;
 import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.enums.FileUploadBizEnum;
 import com.shier.shierbi.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +34,7 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/file")
 @Slf4j
+@Api(tags = "FileController")
 public class FileController {
 
     @Resource
@@ -49,8 +52,9 @@ public class FileController {
      * @return
      */
     @PostMapping("/upload")
+    @ApiOperation(value = "文件上传")
     public BaseResponse<String> uploadFile(@RequestPart("file") MultipartFile multipartFile,
-            UploadFileRequest uploadFileRequest, HttpServletRequest request) {
+                                           UploadFileRequest uploadFileRequest, HttpServletRequest request) {
         String biz = uploadFileRequest.getBiz();
         FileUploadBizEnum fileUploadBizEnum = FileUploadBizEnum.getEnumByValue(biz);
         if (fileUploadBizEnum == null) {

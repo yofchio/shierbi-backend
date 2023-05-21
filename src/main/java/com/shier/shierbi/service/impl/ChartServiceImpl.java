@@ -49,9 +49,6 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
 
         // 无需Prompt，直接调用现有模型
-        // 模型ID
-        //long biModelId = 1660100329896673281L;
-
         // 构造用户输入
         StringBuilder userInput = new StringBuilder();
         userInput.append("分析需求：").append("\n");

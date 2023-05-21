@@ -11,7 +11,6 @@ import com.shier.shierbi.constant.CommonConstant;
 import com.shier.shierbi.constant.UserConstant;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
-import com.shier.shierbi.manager.AiManager;
 import com.shier.shierbi.model.dto.chart.*;
 import com.shier.shierbi.model.entity.Chart;
 import com.shier.shierbi.model.entity.User;
@@ -19,6 +18,8 @@ import com.shier.shierbi.model.vo.BiResponse;
 import com.shier.shierbi.service.ChartService;
 import com.shier.shierbi.service.UserService;
 import com.shier.shierbi.utils.SqlUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/chart")
 @Slf4j
+@Api(tags = "ChartController")
 public class ChartController {
 
     @Resource
@@ -44,9 +46,6 @@ public class ChartController {
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private AiManager aiManager;
 
 
     /**
@@ -57,6 +56,7 @@ public class ChartController {
      * @return
      */
     @PostMapping("/add")
+    @ApiOperation(value = "创建图表")
     public BaseResponse<Long> addChart(@RequestBody ChartAddRequest chartAddRequest, HttpServletRequest request) {
         if (chartAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -79,6 +79,7 @@ public class ChartController {
      * @return
      */
     @PostMapping("/delete")
+    @ApiOperation(value = "删除图表")
     public BaseResponse<Boolean> deleteChart(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -104,6 +105,7 @@ public class ChartController {
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @ApiOperation(value = "管理员更新图表信息")
     public BaseResponse<Boolean> updateChart(@RequestBody ChartUpdateRequest chartUpdateRequest) {
         if (chartUpdateRequest == null || chartUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -125,6 +127,7 @@ public class ChartController {
      * @return
      */
     @GetMapping("/get")
+    @ApiOperation(value = "根据Id获取图表")
     public BaseResponse<Chart> getChartById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -144,6 +147,7 @@ public class ChartController {
      * @return
      */
     @PostMapping("/list/page")
+    @ApiOperation(value = "分页获取图表")
     public BaseResponse<Page<Chart>> listChartByPage(@RequestBody ChartQueryRequest chartQueryRequest,
                                                      HttpServletRequest request) {
         long current = chartQueryRequest.getCurrent();
@@ -162,6 +166,7 @@ public class ChartController {
      * @return
      */
     @PostMapping("/my/list/page")
+    @ApiOperation(value = "获取我的图表")
     public BaseResponse<Page<Chart>> listMyChartByPage(@RequestBody ChartQueryRequest chartQueryRequest,
                                                        HttpServletRequest request) {
         if (chartQueryRequest == null) {
@@ -178,13 +183,14 @@ public class ChartController {
     }
 
     /**
-     * 管理员编辑用户图表
+     * 管理员编辑图表
      *
      * @param chartEditRequest
      * @param request
      * @return
      */
     @PostMapping("/edit")
+    @ApiOperation(value = "管理员编辑图表")
     public BaseResponse<Boolean> editChart(@RequestBody ChartEditRequest chartEditRequest, HttpServletRequest request) {
         if (chartEditRequest == null || chartEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

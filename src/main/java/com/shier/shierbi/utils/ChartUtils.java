@@ -12,7 +12,7 @@ import static com.shier.shierbi.constant.ChartConstant.*;
 /**
  * @author Shier
  * CreateTime 2023/5/21 17:41
- *
+ * 图表工具类
  */
 public class ChartUtils {
     private static final Pattern VALID_GEN_CHART_PATTERN = Pattern.compile(GEN_CHART_REGEX, Pattern.COMMENTS);
@@ -25,7 +25,7 @@ public class ChartUtils {
      */
     public static String getValidGenChart(String preGenChart) {
         Matcher matcher = VALID_GEN_CHART_PATTERN.matcher(preGenChart);
-        ThrowUtils.throwIf(!matcher.find(), ErrorCode.SYSTEM_ERROR, "生成图表错误");
+        ThrowUtils.throwIf(!matcher.find(), ErrorCode.SYSTEM_ERROR, "AI生成图表错误");
         return matcher.group();
     }
 
