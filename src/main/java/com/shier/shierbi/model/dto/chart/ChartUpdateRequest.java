@@ -50,7 +50,7 @@ public class ChartUpdateRequest implements Serializable {
     /**
      * 生成的分析结论
      */
-    private String getResult;
+    private String genResult;
 
     /**
      * 创建图标用户 id

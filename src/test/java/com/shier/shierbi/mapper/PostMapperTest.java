@@ -1,7 +1,5 @@
 package com.shier.shierbi.mapper;
 
-import com.shier.shierbi.model.entity.Post;
-
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;

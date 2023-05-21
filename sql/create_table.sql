@@ -30,7 +30,7 @@ create table if not exists chart
     chartData  text                               null comment '图表数据',
     chartType  varchar(256)                       null comment '图表类型',
     genChart   text                               null comment '生成的图表信息',
-    getResult  text                               null comment '生成的分析结论',
+    genResult  text                               null comment '生成的分析结论',
     userId     bigint                             null comment '创建图标用户 id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',

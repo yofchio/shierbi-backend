@@ -2,8 +2,6 @@ package com.shier.shierbi.esdao;
 
 import com.shier.shierbi.model.dto.post.PostEsDTO;
 import com.shier.shierbi.model.dto.post.PostQueryRequest;
-import com.shier.shierbi.model.entity.Post;
-import com.shier.shierbi.service.PostService;
 
 import java.util.Arrays;
 import java.util.Date;

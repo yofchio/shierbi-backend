@@ -11,12 +11,13 @@ import com.shier.shierbi.constant.CommonConstant;
 import com.shier.shierbi.constant.UserConstant;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
+import com.shier.shierbi.manager.AiManager;
 import com.shier.shierbi.model.dto.chart.*;
 import com.shier.shierbi.model.entity.Chart;
 import com.shier.shierbi.model.entity.User;
+import com.shier.shierbi.model.vo.BiResponse;
 import com.shier.shierbi.service.ChartService;
 import com.shier.shierbi.service.UserService;
-import com.shier.shierbi.utils.ExcelUtils;
 import com.shier.shierbi.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -43,6 +44,9 @@ public class ChartController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private AiManager aiManager;
 
 
     /**
@@ -235,48 +239,37 @@ public class ChartController {
     }
 
     /**
+     * 校验图表
+     *
+     * @param chartId chart id
+     * @param request request
+     */
+    private void doChartValid(long chartId, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        // 判断是否存在
+        Chart oldChart = chartService.getById(chartId);
+        ThrowUtils.throwIf(oldChart == null, ErrorCode.NOT_FOUND_ERROR);
+        // 仅本人或管理员可编辑
+        if (!oldChart.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+    }
+
+    /**
      * 文件上传
      */
     @PostMapping("/gen")
-    public BaseResponse<String> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
-                                             GenChartByAiRequest chartByAiRequest, HttpServletRequest request) {
-        String chartName = chartByAiRequest.getChartName();
-        String goal = chartByAiRequest.getGoal();
-        String chartType = chartByAiRequest.getChartType();
+    public BaseResponse<BiResponse> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
+                                                 GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
+        String chartName = genChartByAiRequest.getChartName();
+        String goal = genChartByAiRequest.getGoal();
+        String chartType = genChartByAiRequest.getChartType();
         // 校验
         ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "图表分析目标为空");
         ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
         ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
-
-        // 用户输入
-        StringBuilder userInput = new StringBuilder();
-        userInput.append("你是一个数据分析师，接下来我会给你我的分析目标和原始数据，请告诉我分析结论。").append("\n");
-        userInput.append("分析目标：").append(goal).append("\n");
-        // 压缩后的数据
-        String result = ExcelUtils.excelToCsv(multipartFile);
-        userInput.append("数据：").append(result).append("\n");
-        return ResultUtils.success(userInput.toString());
-
-        //// 读取用户上传的excel 进行处理
-        //User loginUser = userService.getLoginUser(request);
-        //// 文件目录：根据业务、用户来划分
-        //String uuid = RandomStringUtils.randomAlphanumeric(8);
-        //String filename = uuid + "-" + multipartFile.getOriginalFilename();
-        //File file = null;
-        //try {
-        //    // 返回可访问地址
-        //    return ResultUtils.success("");
-        //} catch (Exception e) {
-        //    //log.error("file upload error, filepath = " + filepath, e);
-        //    throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
-        //} finally {
-        //    if (file != null) {
-        //        // 删除临时文件
-        //        boolean delete = file.delete();
-        //        if (!delete) {
-        //            //log.error("file delete error, filepath = {}", filepath);
-        //        }
-        //    }
-        //}
+        BiResponse biResponse = chartService.genChartByAi(multipartFile, genChartByAiRequest, request);
+        ThrowUtils.throwIf(biResponse == null, ErrorCode.SYSTEM_ERROR, "AI生成错误");
+        return ResultUtils.success(biResponse);
     }
 }
