@@ -190,7 +190,7 @@ public class ChartController {
      * @return
      */
     @PostMapping("/edit")
-    @ApiOperation(value = "管理员编辑图表")
+    @ApiOperation(value = "编辑图表")
     public BaseResponse<Boolean> editChart(@RequestBody ChartEditRequest chartEditRequest, HttpServletRequest request) {
         if (chartEditRequest == null || chartEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -245,26 +245,10 @@ public class ChartController {
     }
 
     /**
-     * 校验图表
-     *
-     * @param chartId chart id
-     * @param request request
-     */
-    private void doChartValid(long chartId, HttpServletRequest request) {
-        User loginUser = userService.getLoginUser(request);
-        // 判断是否存在
-        Chart oldChart = chartService.getById(chartId);
-        ThrowUtils.throwIf(oldChart == null, ErrorCode.NOT_FOUND_ERROR);
-        // 仅本人或管理员可编辑
-        if (!oldChart.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
-    }
-
-    /**
-     * 文件上传
+     * 图表文件上传
      */
     @PostMapping("/gen")
+    @ApiOperation(value = "图表文件上传")
     public BaseResponse<BiResponse> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
                                                  GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
         String chartName = genChartByAiRequest.getChartName();

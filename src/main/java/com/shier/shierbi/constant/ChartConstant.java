@@ -1,5 +1,8 @@
 package com.shier.shierbi.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Shier
  * CreateTime 2023/5/21 17:38
@@ -39,4 +42,14 @@ public interface ChartConstant {
      * 图表默认名称的后缀长度
      */
     int DEFAULT_CHART_NAME_SUFFIX_LEN = 10;
+
+    /**
+     * 文件大小 1M
+     */
+    long FILE_MAX_SIZE = 1 * 1024 * 1024L;
+
+    /**
+     * 文件后缀白名单
+     */
+    List<String>  VALID_FILE_SUFFIX= Arrays.asList("png","jpg","jpeg","svg","xlsx","csv","xls","json","txt","xml","sql");
 }
