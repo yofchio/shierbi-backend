@@ -6,6 +6,7 @@ import com.shier.shierbi.common.ErrorCode;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
 import com.shier.shierbi.manager.AiManager;
+import com.shier.shierbi.manager.RedisLimiterManager;
 import com.shier.shierbi.mapper.ChartMapper;
 import com.shier.shierbi.model.dto.chart.GenChartByAiRequest;
 import com.shier.shierbi.model.entity.Chart;
@@ -38,6 +39,9 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
     @Resource
     private AiManager aiManager;
 
+    @Resource
+    private RedisLimiterManager redisLimiterManager;
+
     @Override
     public BiResponse genChartByAi(MultipartFile multipartFile, GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
         String chartName = genChartByAiRequest.getChartName();
@@ -57,6 +61,9 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         // 校验文件后缀
         String suffix = FileUtil.getSuffix(originalFilename);
         ThrowUtils.throwIf(!VALID_FILE_SUFFIX.contains(suffix), ErrorCode.PARAMS_ERROR, "不支持该类型文件");
+
+        // 用户每秒限流
+        redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
 
         // 无需Prompt，直接调用现有模型
         // 构造用户输入
@@ -103,6 +110,7 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         biResponse.setGenResult(genResult);
         return biResponse;
     }
+
 }
 
 

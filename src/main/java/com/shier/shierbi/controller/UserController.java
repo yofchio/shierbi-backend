@@ -136,7 +136,6 @@ public class UserController {
         String userAvatar = userAddRequest.getUserAvatar();
         String userPassword = userAddRequest.getUserPassword();
         String userRole = userAddRequest.getUserRole();
-
         if (userAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

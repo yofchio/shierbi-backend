@@ -24,4 +24,6 @@
         userId,createTime,updateTime,
         isDelete
     </sql>
+
+    <select id="queryChartData" resultType="java.util.Map">${queryChartSql}</select>
 </mapper>
