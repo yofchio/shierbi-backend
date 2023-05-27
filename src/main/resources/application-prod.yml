@@ -5,7 +5,7 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.134.37.7:3306/shierbi
+    url: jdbc:mysql://xxxxx/shierbi
     username: root
     password: 123456
   # Redis 配置
@@ -16,12 +16,6 @@ spring:
     port: 6379
     timeout: 5000
     password: 123456
-  # Elasticsearch 配置
-  # todo 需替换配置
-#  elasticsearch:
-#    uris: http://localhost:9200
-#    username: root
-#    password: 123456
 mybatis-plus:
   configuration:
     # 生产环境关闭日志
