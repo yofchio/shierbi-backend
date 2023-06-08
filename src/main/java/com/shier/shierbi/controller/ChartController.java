@@ -39,6 +39,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/chart")
 @Slf4j
 @Api(tags = "ChartController")
+//@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
 public class ChartController {
 
     @Resource
@@ -245,10 +247,10 @@ public class ChartController {
     }
 
     /**
-     * 图表文件上传
+     * 图表文件上传（同步）
      */
     @PostMapping("/gen")
-    @ApiOperation(value = "图表文件上传")
+    @ApiOperation(value = "同步图表文件上传")
     public BaseResponse<BiResponse> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
                                                  GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
         String chartName = genChartByAiRequest.getChartName();
@@ -259,6 +261,25 @@ public class ChartController {
         ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
         ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
         BiResponse biResponse = chartService.genChartByAi(multipartFile, genChartByAiRequest, request);
+        ThrowUtils.throwIf(biResponse == null, ErrorCode.SYSTEM_ERROR, "AI生成错误");
+        return ResultUtils.success(biResponse);
+    }
+
+    /**
+     * 图表文件上传（异步）
+     */
+    @PostMapping("/gen/async")
+    @ApiOperation(value = "异步图表文件上传")
+    public BaseResponse<BiResponse> genChartByAiAsync(@RequestPart("file") MultipartFile multipartFile,
+                                                 GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
+        String chartName = genChartByAiRequest.getChartName();
+        String goal = genChartByAiRequest.getGoal();
+        String chartType = genChartByAiRequest.getChartType();
+        // 校验
+        ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "图表分析目标为空");
+        ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
+        ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
+        BiResponse biResponse = chartService.genChartByAiAsync(multipartFile, genChartByAiRequest, request);
         ThrowUtils.throwIf(biResponse == null, ErrorCode.SYSTEM_ERROR, "AI生成错误");
         return ResultUtils.success(biResponse);
     }

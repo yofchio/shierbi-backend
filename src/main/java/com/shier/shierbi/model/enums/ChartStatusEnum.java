@@ -7,21 +7,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 用户角色枚举
+ * 图表状态枚举类
  *
  * @author Shier
  */
-public enum UserRoleEnum {
+public enum ChartStatusEnum {
 
-    USER("用户", "user"),
-    ADMIN("管理员", "admin"),
-    BAN("被封号", "ban");
-
+    WAIT("等待", "wait"),
+    RUNNING("生成中", "running"),
+    SUCCEED("成功生成", "succeed"),
+    FAILED("生成失败", "failed");
     private final String text;
 
     private final String value;
 
-    UserRoleEnum(String text, String value) {
+    ChartStatusEnum(String text, String value) {
         this.text = text;
         this.value = value;
     }
@@ -41,11 +41,11 @@ public enum UserRoleEnum {
      * @param value
      * @return
      */
-    public static UserRoleEnum getEnumByValue(String value) {
+    public static ChartStatusEnum getEnumByValue(String value) {
         if (ObjectUtils.isEmpty(value)) {
             return null;
         }
-        for (UserRoleEnum anEnum : UserRoleEnum.values()) {
+        for (ChartStatusEnum anEnum : ChartStatusEnum.values()) {
             if (anEnum.value.equals(value)) {
                 return anEnum;
             }

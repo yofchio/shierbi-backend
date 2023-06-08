@@ -15,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -35,6 +32,8 @@ import java.util.Arrays;
 @RequestMapping("/file")
 @Slf4j
 @Api(tags = "FileController")
+//@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
 public class FileController {
 
     @Resource

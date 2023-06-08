@@ -39,6 +39,8 @@ import static com.shier.shierbi.constant.UserConstant.SALT;
 @Api(tags = "UserController")
 @RequestMapping("/user")
 @Slf4j
+//@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
 public class UserController {
 
     @Resource
