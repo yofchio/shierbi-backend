@@ -6,7 +6,6 @@ create database if not exists shierbi;
 -- 切换库
 use shierbi;
 
-
 -- 用户表
 create table if not exists user
 (
