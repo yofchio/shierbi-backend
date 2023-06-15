@@ -7,8 +7,11 @@ import com.shier.shierbi.common.ErrorCode;
 import com.shier.shierbi.constant.CommonConstant;
 import com.shier.shierbi.constant.UserConstant;
 import com.shier.shierbi.exception.BusinessException;
+import com.shier.shierbi.exception.ThrowUtils;
 import com.shier.shierbi.mapper.UserMapper;
+import com.shier.shierbi.model.dto.user.UserAddRequest;
 import com.shier.shierbi.model.dto.user.UserQueryRequest;
+import com.shier.shierbi.model.dto.user.UserUpdateMyRequest;
 import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.enums.UserRoleEnum;
 import com.shier.shierbi.model.vo.LoginUserVO;
@@ -21,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +40,21 @@ import static com.shier.shierbi.constant.UserConstant.SALT;
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Resource
+    private UserMapper userMapper;
 
+
+    /**
+     * 用户注册
+     *
+     * @param userAccount   用户账户
+     * @param userPassword  用户密码
+     * @param checkPassword 校验密码
+     * @param userCode
+     * @return
+     */
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword, String userCode) {
         // 1. 校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -54,21 +70,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
         synchronized (userAccount.intern()) {
-            // 账户不能重复
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("userAccount", userAccount);
-            long count = this.baseMapper.selectCount(queryWrapper);
-            if (count > 0) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
-            }
-            // 2. 加密
+            // 账户和编号不能重复
+            isCodeAndAccountExist(userAccount, userCode);
+
+            // 3. 加密
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-            // 3. 插入数据
+            // 4. 插入数据
             User user = new User();
             user.setUserAccount(userAccount);
             user.setUserName(userAccount);
             user.setUserPassword(encryptPassword);
             user.setUserAvatar(DEFAULT_AVATAR);
+            user.setUserCode(userCode);
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
@@ -77,6 +90,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
+    /**
+     * 用户登录
+     *
+     * @param userAccount  用户账户
+     * @param userPassword 用户密码
+     * @param request
+     * @return
+     */
     @Override
     public LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         // 1. 校验
@@ -104,6 +125,45 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 3. 记录用户的登录态
         request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
         return this.getLoginUserVO(user);
+    }
+
+    /**
+     * 管理员添加用户
+     *
+     * @param userAddRequest
+     * @return
+     */
+    @Override
+    public long addUser(UserAddRequest userAddRequest) {
+        String userName = userAddRequest.getUserName();
+        String userAccount = userAddRequest.getUserAccount();
+        String userAvatar = userAddRequest.getUserAvatar();
+        String userPassword = userAddRequest.getUserPassword();
+        String userRole = userAddRequest.getUserRole();
+        String userCode = userAddRequest.getUserCode();
+        String email = userAddRequest.getEmail();
+        String phone = userAddRequest.getPhone();
+        String gender = userAddRequest.getGender();
+        Integer userStatus = userAddRequest.getUserStatus();
+
+        // 账户和编号不能重复
+        isCodeAndAccountExist(userAccount, userCode);
+        // 加密
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        User user = new User();
+        user.setUserName(userName);
+        user.setUserAvatar(userAvatar);
+        user.setUserRole(userRole);
+        user.setUserAccount(userAccount);
+        user.setUserPassword(encryptPassword);
+        user.setUserCode(userCode);
+        user.setUserStatus(userStatus);
+        user.setEmail(email);
+        user.setGender(gender);
+        user.setPhone(phone);
+        boolean result = this.save(user);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        return user.getId();
     }
 
     /**
@@ -227,5 +287,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
+    }
+
+    /**
+     * 用户修改自己的信息
+     *
+     * @param userUpdateMyRequest
+     * @param request
+     * @return
+     */
+    @Override
+    public boolean updateMyUser(UserUpdateMyRequest userUpdateMyRequest, HttpServletRequest request) {
+
+        String userCode = userUpdateMyRequest.getUserCode();
+        // 用户编号不能重复
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userCode", userCode);
+        long count = userMapper.selectCount(queryWrapper);
+        if (count > 1) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "编号已存在");
+        }
+
+        User loginUser = this.getLoginUser(request);
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateMyRequest, user);
+        user.setId(loginUser.getId());
+        boolean result = this.updateById(user);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        return true;
+    }
+
+    /**
+     * 判断账号和编号是否重复
+     * @param userAccount
+     * @param userCode
+     */
+    private void isCodeAndAccountExist(String userAccount, String userCode) {
+        // 账户不能重复
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        long count = userMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
+        }
+        // 用户编号不能重复
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userCode", userCode);
+        count = userMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "编号已存在");
+        }
     }
 }

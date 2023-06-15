@@ -1,7 +1,8 @@
 package com.shier.shierbi.model.dto.user;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 用户注册请求体
@@ -18,4 +19,9 @@ public class UserRegisterRequest implements Serializable {
     private String userPassword;
 
     private String checkPassword;
+
+    /**
+     * 用户编号
+     */
+    private String userCode;
 }

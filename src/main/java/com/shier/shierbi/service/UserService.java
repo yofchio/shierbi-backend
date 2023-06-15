@@ -2,7 +2,9 @@ package com.shier.shierbi.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shier.shierbi.model.dto.user.UserAddRequest;
 import com.shier.shierbi.model.dto.user.UserQueryRequest;
+import com.shier.shierbi.model.dto.user.UserUpdateMyRequest;
 import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.vo.LoginUserVO;
 import com.shier.shierbi.model.vo.UserVO;
@@ -25,7 +27,7 @@ public interface UserService extends IService<User> {
      * @param checkPassword 校验密码
      * @return 新用户 id
      */
-    long userRegister(String userAccount, String userPassword, String checkPassword);
+    long userRegister(String userAccount, String userPassword, String checkPassword, String userCode);
 
     /**
      * 用户登录
@@ -36,6 +38,14 @@ public interface UserService extends IService<User> {
      * @return 脱敏后的用户信息
      */
     LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
+
+    /**
+     * 管理员添加用户
+     *
+     * @param userAddRequest
+     * @return
+     */
+    long addUser(UserAddRequest userAddRequest);
 
     /**
      * 获取当前登录用户
@@ -107,5 +117,14 @@ public interface UserService extends IService<User> {
      * @return
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    /**
+     * 用户修改自己的信息
+     * @param userUpdateMyRequest
+     * @param request
+     * @return
+     */
+    boolean updateMyUser(UserUpdateMyRequest userUpdateMyRequest,
+                                       HttpServletRequest request);
 
 }

@@ -32,8 +32,8 @@ import java.util.Arrays;
 @RequestMapping("/file")
 @Slf4j
 @Api(tags = "FileController")
-//@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
-@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
+@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
 public class FileController {
 
     @Resource

@@ -1,6 +1,5 @@
 package com.shier.shierbi.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shier.shierbi.annotation.AuthCheck;
 import com.shier.shierbi.common.BaseResponse;
@@ -10,7 +9,6 @@ import com.shier.shierbi.common.ResultUtils;
 import com.shier.shierbi.constant.UserConstant;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
-import com.shier.shierbi.mapper.UserMapper;
 import com.shier.shierbi.model.dto.user.*;
 import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.vo.LoginUserVO;
@@ -21,14 +19,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
-import static com.shier.shierbi.constant.UserConstant.SALT;
 
 /**
  * 用户接口
@@ -39,15 +34,12 @@ import static com.shier.shierbi.constant.UserConstant.SALT;
 @Api(tags = "UserController")
 @RequestMapping("/user")
 @Slf4j
-//@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
-@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
+@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
 public class UserController {
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private UserMapper userMapper;
 
     /**
      * 用户注册
@@ -64,10 +56,11 @@ public class UserController {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
+        String userCode = userRegisterRequest.getUserCode();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             return null;
         }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+        long result = userService.userRegister(userAccount, userPassword, checkPassword, userCode);
         return ResultUtils.success(result);
     }
 
@@ -123,42 +116,23 @@ public class UserController {
     }
 
     /**
-     * 创建用户
+     * 管理员添加用户
      *
      * @param userAddRequest
-     * @param request
      * @return
      */
     @PostMapping("/add")
-    @ApiOperation(value = "管理员创建用户")
+    @ApiOperation(value = "管理员添加用户")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest, HttpServletRequest request) {
-        String userName = userAddRequest.getUserName();
-        String userAccount = userAddRequest.getUserAccount();
-        String userAvatar = userAddRequest.getUserAvatar();
-        String userPassword = userAddRequest.getUserPassword();
-        String userRole = userAddRequest.getUserRole();
+    public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest) {
+
         if (userAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 账户不能重复
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userAccount", userAccount);
-        long count = userMapper.selectCount(queryWrapper);
-        if (count > 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
-        }
-        // 加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-        User user = new User();
-        user.setUserName(userName);
-        user.setUserAvatar(userAvatar);
-        user.setUserRole(userRole);
-        user.setUserAccount(userAccount);
-        user.setUserPassword(encryptPassword);
-        boolean result = this.userService.save(user);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-        return ResultUtils.success(user.getId());
+
+        long userId = userService.addUser(userAddRequest);
+        ThrowUtils.throwIf(userId < 0, ErrorCode.PARAMS_ERROR, "添加用户失败");
+        return ResultUtils.success(userId);
     }
 
     /**
@@ -289,17 +263,13 @@ public class UserController {
      */
     @PostMapping("/update/my")
     @ApiOperation(value = "用户更新个人信息")
-    public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest,
+    public BaseResponse<Boolean> updateMyInfo(@RequestBody UserUpdateMyRequest userUpdateMyRequest,
                                               HttpServletRequest request) {
         if (userUpdateMyRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
-        User user = new User();
-        BeanUtils.copyProperties(userUpdateMyRequest, user);
-        user.setId(loginUser.getId());
-        boolean result = userService.updateById(user);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-        return ResultUtils.success(true);
+        boolean updateMyUser = userService.updateMyUser(userUpdateMyRequest, request);
+
+        return ResultUtils.success(updateMyUser);
     }
 }
