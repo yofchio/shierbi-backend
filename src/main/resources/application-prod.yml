@@ -4,14 +4,14 @@ server:
     context-path: /api
     session:
       cookie:
-        domain: bi.kongshier.top
+        domain: xxx.xxx.xxx.xxx
         same-site: lax
         secure: false
 spring:
   # DataSource Config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.134.37.7:3306/shierbi?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    url: jdbc:mysql://xxx.xxx.xxx.xxx:3306/shierbi?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password: shier
   # session 失效时间 30 天
@@ -21,13 +21,13 @@ spring:
   # redis配置
   redis:
     port: 6379
-    host: 8.134.37.7
+    host: xxx.xxx.xxx.xxx
     database: 1
-    password: kcsen281017
+    password: xxx.xxx.xxx.xxx
   # rabbitmq 信息
   rabbitmq:
-    host: 8.134.37.7
-    password: kcsen123456
+    host: xxx.xxx.xxx.xxx
+    password: xxx.xxx.xxx.xxx
     username: shier
     port: 5672
 mybatis-plus:
@@ -41,12 +41,5 @@ ai:
 # 鱼聪明SDK
 yuapi:
   client:
-    access-key: izvszyxh5ndyccuuhkxseft959h37idh
-    secret-key: ktek1dp71r257jqfpx173nv98xzwpbi9
-aliyun:
-  oss:
-    file:
-      endpoint: oss-cn-beijing.aliyuncs.com
-      keyid: LTAI5tDqVTD4RNi5n6NiGjFH
-      keysecret: aGzwOa5gQ942Z5ZXcU1BjmdoPxyU0N
-      bucketname: shierpartner
+    access-key: xxx.xxx.xxx.xxx
+    secret-key: xxx.xxx.xxx.xxx
