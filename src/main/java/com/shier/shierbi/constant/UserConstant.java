@@ -2,6 +2,7 @@ package com.shier.shierbi.constant;
 
 /**
  * 用户常量
+ * @author Shier
  */
 public interface UserConstant {
 

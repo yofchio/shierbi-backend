@@ -282,4 +282,23 @@ public class ChartController {
         ThrowUtils.throwIf(biResponse == null, ErrorCode.SYSTEM_ERROR, "AI生成错误");
         return ResultUtils.success(biResponse);
     }
+
+    /**
+     * 图表文件上传（异步 消息队列）
+     */
+    @PostMapping("/gen/async/mq")
+    @ApiOperation(value = "消息队列mq 异步图表文件上传")
+    public BaseResponse<BiResponse> genChartByAiAsyncMq(@RequestPart("file") MultipartFile multipartFile,
+                                                      GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
+        String chartName = genChartByAiRequest.getChartName();
+        String goal = genChartByAiRequest.getGoal();
+        String chartType = genChartByAiRequest.getChartType();
+        // 校验
+        ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "图表分析目标为空");
+        ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
+        ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
+        BiResponse biResponse = chartService.genChartByAiAsyncMq(multipartFile, genChartByAiRequest, request);
+        ThrowUtils.throwIf(biResponse == null, ErrorCode.SYSTEM_ERROR, "AI生成错误");
+        return ResultUtils.success(biResponse);
+    }
 }

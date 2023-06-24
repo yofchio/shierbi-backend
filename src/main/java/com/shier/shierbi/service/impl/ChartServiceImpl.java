@@ -2,6 +2,7 @@ package com.shier.shierbi.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.shier.shierbi.bizmq.BiMqMessageProducer;
 import com.shier.shierbi.common.ErrorCode;
 import com.shier.shierbi.exception.BusinessException;
 import com.shier.shierbi.exception.ThrowUtils;
@@ -46,6 +47,9 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
 
     @Resource
     private ThreadPoolExecutor threadPoolExecutor;
+
+    @Resource
+    private BiMqMessageProducer biMqMessageProducer;
 
     /**
      * 图表生成（同步）
@@ -131,7 +135,7 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
     }
 
     /**
-     * 图表生成异步
+     * 异步图表生成
      *
      * @param multipartFile       用户上传的文件信息
      * @param genChartByAiRequest 用户的需求
@@ -260,13 +264,88 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         return biResponse;
     }
 
+
+    /**
+     * 异步RabbitMQ 消息队列 图表生成
+     *
+     * @param multipartFile       用户上传的文件信息
+     * @param genChartByAiRequest 用户的需求
+     * @param request             http request
+     * @return
+     */
+    @Override
+    public BiResponse genChartByAiAsyncMq(MultipartFile multipartFile, GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
+        String chartName = genChartByAiRequest.getChartName();
+        String goal = genChartByAiRequest.getGoal();
+        String chartType = genChartByAiRequest.getChartType();
+        User loginUser = userService.getLoginUser(request);
+        // 校验
+        ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "图表分析目标为空");
+        ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
+        ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
+
+        // 校验文件
+        long fileSize = multipartFile.getSize();
+        String originalFilename = multipartFile.getOriginalFilename();
+        // 校验文件大小
+        ThrowUtils.throwIf(fileSize > FILE_MAX_SIZE, ErrorCode.PARAMS_ERROR, "文件大小超过 1M");
+        // 校验文件后缀
+        String suffix = FileUtil.getSuffix(originalFilename);
+        ThrowUtils.throwIf(!VALID_FILE_SUFFIX.contains(suffix), ErrorCode.PARAMS_ERROR, "不支持该类型文件");
+
+        // 用户每秒限流
+        redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
+
+        // 无需Prompt，直接调用现有模型
+        // 构造用户输入
+        StringBuilder userInput = new StringBuilder();
+        userInput.append("分析需求：").append("\n");
+        // 拼接分析目标
+        String userGoal = goal;
+        if (StringUtils.isNotBlank(chartType)) {
+            userGoal += "，请使用" + chartType;
+        }
+        userInput.append(userGoal).append("\n");
+        userInput.append("原始数据：").append("\n");
+
+        // 压缩后的数据
+        String csvData = ExcelUtils.excelToCsv(multipartFile);
+        userInput.append(csvData).append("\n");
+
+        // 先插入数据到数据库
+        Chart chart = new Chart();
+        chartName = StringUtils.isBlank(chartName) ? ChartUtils.genDefaultChartName() : chartName;
+        chart.setGoal(goal);
+        chart.setChartData(csvData);
+        chart.setChartName(chartName);
+        chart.setChartType(chartType);
+        chart.setChartStatus(ChartStatusEnum.WAIT.getValue());
+        chart.setUserId(loginUser.getId());
+        boolean saveResult = this.save(chart);
+        ThrowUtils.throwIf(!saveResult, ErrorCode.SYSTEM_ERROR, "图表保存失败");
+
+        // 任务队列已满
+        if (threadPoolExecutor.getQueue().size() > threadPoolExecutor.getMaximumPoolSize()) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "当前任务队列已满");
+        }
+
+        Long newChartId = chart.getId();
+        biMqMessageProducer.sendMessage(String.valueOf(newChartId));
+
+        // 返回到前端
+        BiResponse biResponse = new BiResponse();
+        biResponse.setChartId(chart.getId());
+        return biResponse;
+    }
+
+
     /**
      * 图表更新错误
      *
      * @param chartId
      * @param execMessage
      */
-    private void handleChartUpdateError(long chartId, String execMessage) {
+    public void handleChartUpdateError(long chartId, String execMessage) {
         Chart updateChartResult = new Chart();
         updateChartResult.setId(chartId);
         updateChartResult.setChartStatus(ChartStatusEnum.FAILED.getValue());

@@ -24,6 +24,12 @@ spring:
     host: 8.134.37.7
     database: 1
     password: kcsen281017
+  # rabbitmq 信息
+  rabbitmq:
+    host: 8.134.37.7
+    password: kcsen123456
+    username: shier
+    port: 5672
 mybatis-plus:
   configuration:
     # 生产环境关闭日志
