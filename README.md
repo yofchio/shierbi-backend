@@ -51,10 +51,8 @@
 ### 用户登录注册
 ![image](https://user-images.githubusercontent.com/94662685/248859299-3c3aa05e-813a-4b02-9399-86ef49469e86.png)
 
-
 ### 项目首页
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/2b4d936f-622c-4ec0-9b7d-27e7ed5b7503)
-
+![image](https://user-images.githubusercontent.com/94662685/248863020-67959893-4dce-4ea8-bcb1-8482b8e0c094.png)
 
 ### 同步分析数据生成图表
 ![image](https://user-images.githubusercontent.com/94662685/248860079-33574351-bbe4-4cb2-934a-3ffdcbb4cbf1.png)
@@ -70,8 +68,8 @@
 ![image](https://user-images.githubusercontent.com/94662685/248860583-e3aad1e7-ed4e-4506-aa69-e8b3f1d82046.png)
 
 ### AI 对话管理
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/d9c41c51-4a21-458f-ac53-5f0247f71280)
+![image](https://user-images.githubusercontent.com/94662685/248860609-8455b515-7f36-46cc-b512-707ad62d5f9a.png)
 
 ### 用户信息
-![image](https://user-images.githubusercontent.com/94662685/248860609-8455b515-7f36-46cc-b512-707ad62d5f9a.png)
+![](https://user-images.githubusercontent.com/94662685/248862737-e1701991-05f5-4f37-85b8-54fcd0b55e3c.png)
 
