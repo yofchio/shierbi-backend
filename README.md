@@ -5,7 +5,7 @@
 
 ## 项目介绍
 基于React+Spring Boot+MQ+AIGC的智能数据分析平台。
-> AIGC ：Artificial Intelligence Generation Content
+> AIGC ：Artificial Intelligence Generation Content(AI 生成内容)
 
 区别于传统的BI，数据分析者只需要导入最原始的数据集，输入想要进行分析的目标，就能利用AI自动生成一个符合要求的图表以及分析结论。此外，还会有图表管理、异步生成、AI对话等功能。只需输入分析目标、原始数据和原始问题，利用AI就能一键生成可视化图表、分析结论和问题解答，大幅降低人工数据分析成本。
 
@@ -16,7 +16,7 @@
 ### 基础架构
 基础架构：客户端输入分析诉求和原始数据，向业务后端发送请求。业务后端利用AI服务处理客户端数据，保持到数据库，并生成图表。处理后的数据由业务后端发送给AI服务，AI服务生成结果并返回给后端，最终将结果返回给客户端展示。
 
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/1f1964bf-ed5b-4aa9-a297-247d9c106d60)
+![image](https://www.yuque.com/api/filetransfer/images?url=https%3A%2F%2Fshierimages.oss-cn-shenzhen.aliyuncs.com%2FTyporaImages%2Fimage-20230626133359830.png%3Fx-oss-process%3Dimage%252Fwatermark%252Ctype_d3F5LW1pY3JvaGVp%252Csize_26%252Ctext_U2hpZXI%253D%252Ccolor_FFFFFF%252Cshadow_50%252Ct_80%252Cg_se%252Cx_10%252Cy_10&sign=11bc2b3f0284409db91fe83fcf9ae0c79501e83fa5e936bd486595f005b80716)
 ### 优化项目架构-异步化处理
 优化流程（异步化）：客户端输入分析诉求和原始数据，向业务后端发送请求。业务后端将请求事件放入消息队列，并为客户端生成取餐号，让要生成图表的客户端去排队，消息队列根据I服务负载情况，定期检查进度，如果AI服务还能处理更多的图表生成请求，就向任务处理模块发送消息。
 
