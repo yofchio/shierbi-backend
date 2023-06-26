@@ -16,9 +16,9 @@ public class BiMqInit {
         try {
             ConnectionFactory factory = new ConnectionFactory();
             // 设置 rabbitmq 对应的信息
-            factory.setHost(BiMqConstant.BI_HOST);
-            factory.setUsername(BiMqConstant.BI_USERNAME);
-            factory.setPassword(BiMqConstant.BI_PASSWORD);
+            factory.setHost(BiMqConstant.BI_MQ_HOST);
+            factory.setUsername(BiMqConstant.BI_MQ_USERNAME);
+            factory.setPassword(BiMqConstant.BI_MQ_PASSWORD);
 
             Connection connection = factory.newConnection();
 

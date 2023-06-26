@@ -22,7 +22,6 @@ public class GenChartByAiRequest implements Serializable {
      */
     private String goal;
 
-
     /**
      * 图表类型
      */

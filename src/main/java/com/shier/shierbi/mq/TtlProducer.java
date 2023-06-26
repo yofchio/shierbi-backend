@@ -4,6 +4,7 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.shier.shierbi.constant.BiMqConstant;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,9 +19,9 @@ public class TtlProducer {
         // 创建链接工厂
         ConnectionFactory factory = new ConnectionFactory();
         // 设置 rabbitmq 对应的信息
-        factory.setHost("xxx.xxx.xxx.xxx");
-        factory.setUsername("xxx.xxx.xxx.xxx");
-        factory.setPassword("xxx.xxx.xxx.xxx");
+        factory.setHost(BiMqConstant.BI_MQ_HOST);
+        factory.setUsername(BiMqConstant.BI_MQ_USERNAME);
+        factory.setPassword(BiMqConstant.BI_MQ_PASSWORD);
         try (Connection connection = factory.newConnection();
              // 建立链接，创建频道
              Channel channel = connection.createChannel()) {

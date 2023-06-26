@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +35,8 @@ import java.util.List;
 @Api(tags = "UserController")
 @RequestMapping("/user")
 @Slf4j
-@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
-//@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
+//@CrossOrigin(origins = "http://bi.kongshier.top", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8000", allowCredentials = "true")
 public class UserController {
 
     @Resource
@@ -56,13 +57,38 @@ public class UserController {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-        String userCode = userRegisterRequest.getUserCode();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
-            return null;
+            throw new BusinessException(ErrorCode.NULL_ERROR,"参数为空");
         }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword, userCode);
+
+        long result = userService.userRegister(userRegisterRequest);
         return ResultUtils.success(result);
     }
+
+    /**
+     * 用户注册
+     *
+     * @param userRegisterRequest
+     * @return
+     */
+    @PostMapping("/registerfile")
+    @ApiOperation(value = "用户注册和头像上传")
+    public BaseResponse<Long> userRegisterFile(@RequestPart("file") MultipartFile file,UserRegisterRequest userRegisterRequest) {
+        if (userRegisterRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String userAccount = userRegisterRequest.getUserAccount();
+        String userPassword = userRegisterRequest.getUserPassword();
+        String checkPassword = userRegisterRequest.getCheckPassword();
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
+            throw new BusinessException(ErrorCode.NULL_ERROR,"参数为空");
+        }
+        // 上传文件为空
+        ThrowUtils.throwIf(file==null,ErrorCode.NULL_ERROR);
+        long result = userService.userRegisterFile(userRegisterRequest,file);
+        return ResultUtils.success(result);
+    }
+
 
     /**
      * 用户登录

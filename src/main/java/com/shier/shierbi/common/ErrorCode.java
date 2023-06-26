@@ -2,6 +2,7 @@ package com.shier.shierbi.common;
 
 /**
  * 自定义错误码
+ * @author Shier
  */
 public enum ErrorCode {
 
@@ -10,6 +11,11 @@ public enum ErrorCode {
     NOT_LOGIN_ERROR(40100, "未登录"),
     NO_AUTH_ERROR(40101, "无权限"),
     NOT_FOUND_ERROR(40400, "请求数据不存在"),
+
+    /**
+     * 40001 数据为空
+     */
+    NULL_ERROR(40001, "请求数据为空"),
 
     TOO_MANY_REQUEST(42900, "请求过于频繁"),
 

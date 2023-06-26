@@ -43,12 +43,22 @@ public interface ChartConstant {
     int DEFAULT_CHART_NAME_SUFFIX_LEN = 10;
 
     /**
-     * 文件大小 1M
+     * 图表上传文件大小 1M
      */
-    long FILE_MAX_SIZE = 1 * 1024 * 1024L;
+    long FILE_MAX_SIZE = 2 * 1024 * 1024L;
 
     /**
-     * 文件后缀白名单
+     * 图表上传文件后缀白名单
      */
-    List<String>  VALID_FILE_SUFFIX= Arrays.asList("png","jpg","jpeg","svg","xlsx","csv","xls","json","txt","xml","sql");
+    List<String>  VALID_FILE_SUFFIX= Arrays.asList("xlsx","csv","xls","json");
+
+    /**
+     * 用户头像上传文件大小 2M
+     */
+    long USER_FILE_MAX_SIZE = 2 * 1024 * 1024L;
+
+    /**
+     * 图表上传文件后缀白名单
+     */
+    List<String>  USER_VALID_FILE_SUFFIX= Arrays.asList("png","jpg","jpeg");
 }

@@ -13,9 +13,30 @@ public interface BiMqConstant {
 
     String BI_DIRECT_EXCHANGE = "direct";
 
-    String BI_HOST = "xxx.xxx.xxx.xxx";
-    String BI_USERNAME = "xxx.xxx.xxx.xxx";
-    String BI_PASSWORD = "xxx.xxx.xxx.xxx";
+
+    /**
+     * AI 问答
+     */
+    String AI_QUESTION_EXCHANGE_NAME = "ai_question_exchange";
+    String AI_QUESTION_QUEUE = "ai_question_queue";
+    String AI_QUESTION_ROUTING_KEY = "ai_question_routingKey";
+
+    String AI_QUESTION_DIRECT_EXCHANGE = "direct";
+
+    /**
+     * MQ ip地址
+     */
+    String BI_MQ_HOST = "XXXX";
+    /**
+     * MQ 用户名
+     */
+    String BI_MQ_USERNAME = "XXXX";
+    /**
+     * MQ 密码
+     */
+    String BI_MQ_PASSWORD = "XXXXX";
+
+
 
 
 }

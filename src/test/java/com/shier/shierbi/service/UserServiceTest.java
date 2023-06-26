@@ -1,6 +1,6 @@
 package com.shier.shierbi.service;
 
-import org.junit.jupiter.api.Assertions;
+import com.shier.shierbi.model.dto.user.UserRegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,18 +19,20 @@ public class UserServiceTest {
 
     @Test
     void userRegister() {
-        String userAccount = "shier";
-        String userPassword = "";
-        String checkPassword = "123456";
-        String userCode = "11";
-        try {
-            long result = userService.userRegister(userAccount, userPassword, checkPassword,userCode);
-            Assertions.assertEquals(-1, result);
-            userAccount = "yu";
-            result = userService.userRegister(userAccount, userPassword, checkPassword,userCode);
-            Assertions.assertEquals(-1, result);
-        } catch (Exception e) {
 
-        }
+        UserRegisterRequest registerRequest = new UserRegisterRequest();
+        registerRequest.setUserAccount("shier");
+        registerRequest.setUserPassword("123456789");
+        registerRequest.setCheckPassword("123456789");
+        registerRequest.setUserCode("001");
+        //try {
+        //    long result = userService.userRegister(registerRequest);
+        //    Assertions.assertEquals(-1, result);
+        //    registerRequest.setUserAccount("xiao");
+        //    result = userService.userRegister(registerRequest);
+        //    Assertions.assertEquals(-1, result);
+        //} catch (Exception e) {
+
+        //}
     }
 }

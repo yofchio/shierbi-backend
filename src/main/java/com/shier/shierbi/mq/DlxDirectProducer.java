@@ -4,6 +4,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import com.shier.shierbi.constant.BiMqConstant;
 
 import java.util.Scanner;
 
@@ -20,9 +21,9 @@ public class DlxDirectProducer {
         ConnectionFactory factory = new ConnectionFactory();
 
         // 设置 rabbitmq 对应的信息
-        factory.setHost("xxx.xxx.xxx.xxx");
-        factory.setUsername("xxx.xxx.xxx.xxx");
-        factory.setPassword("xxx.xxx.xxx.xxx");
+        factory.setHost(BiMqConstant.BI_MQ_HOST);
+        factory.setUsername(BiMqConstant.BI_MQ_USERNAME);
+        factory.setPassword(BiMqConstant.BI_MQ_PASSWORD);
 
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {

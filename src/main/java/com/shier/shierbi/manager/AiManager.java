@@ -41,4 +41,15 @@ public class AiManager {
         }
         return response.getData().getContent();
     }
+
+    public String doAiChat(Long modelId, String message) {
+        DevChatRequest devChatRequest = new DevChatRequest();
+        devChatRequest.setModelId(modelId);
+        devChatRequest.setMessage(message);
+        BaseResponse<DevChatResponse> response = congMingClient.doChat(devChatRequest);
+        if (response == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "AI 响应错误");
+        }
+        return response.getData().getContent();
+    }
 }

@@ -80,7 +80,10 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         ThrowUtils.throwIf(!VALID_FILE_SUFFIX.contains(suffix), ErrorCode.PARAMS_ERROR, "不支持该类型文件");
 
         // 用户每秒限流
-        redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
+        boolean tryAcquireRateLimit = redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
+        if (!tryAcquireRateLimit) {
+            throw new BusinessException(ErrorCode.TOO_MANY_REQUEST);
+        }
 
         // 无需Prompt，直接调用现有模型
         // 构造用户输入
@@ -163,7 +166,10 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         ThrowUtils.throwIf(!VALID_FILE_SUFFIX.contains(suffix), ErrorCode.PARAMS_ERROR, "不支持该类型文件");
 
         // 用户每秒限流
-        redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
+        boolean tryAcquireRateLimit = redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
+        if (!tryAcquireRateLimit) {
+            throw new BusinessException(ErrorCode.TOO_MANY_REQUEST);
+        }
 
         // 无需Prompt，直接调用现有模型
         // 构造用户输入
@@ -288,7 +294,7 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart> implements
         long fileSize = multipartFile.getSize();
         String originalFilename = multipartFile.getOriginalFilename();
         // 校验文件大小
-        ThrowUtils.throwIf(fileSize > FILE_MAX_SIZE, ErrorCode.PARAMS_ERROR, "文件大小超过 1M");
+        ThrowUtils.throwIf(fileSize > FILE_MAX_SIZE, ErrorCode.PARAMS_ERROR, "文件大小超过 2M");
         // 校验文件后缀
         String suffix = FileUtil.getSuffix(originalFilename);
         ThrowUtils.throwIf(!VALID_FILE_SUFFIX.contains(suffix), ErrorCode.PARAMS_ERROR, "不支持该类型文件");

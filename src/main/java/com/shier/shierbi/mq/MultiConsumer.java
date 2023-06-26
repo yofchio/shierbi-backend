@@ -4,6 +4,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import com.shier.shierbi.constant.BiMqConstant;
 
 /**
  * @author Shier
@@ -17,9 +18,9 @@ public class MultiConsumer {
         // 建立链接
         ConnectionFactory factory = new ConnectionFactory();
         // 设置 rabbitmq 对应的信息
-        factory.setHost("xxx.xxx.xxx.xxx");
-        factory.setUsername("xxx.xxx.xxx.xxx");
-        factory.setPassword("xxx.xxx.xxx.xxx");
+        factory.setHost(BiMqConstant.BI_MQ_HOST);
+        factory.setUsername(BiMqConstant.BI_MQ_USERNAME);
+        factory.setPassword(BiMqConstant.BI_MQ_PASSWORD);
         final Connection connection = factory.newConnection();
 
         for (int i = 0; i < 2; i++) {

@@ -36,10 +36,13 @@ spring:
       max-file-size: 1MB
   # rabbitmq 信息
   rabbitmq:
-    host: xxx.xxx.xxx.xxx
-    password: xxx.xxx.xxx.xxx
-    username: xxx.xxx.xxx.xxx
+    host: 8.134.37.7
+    password: kcsen123456
+    username: shier
     port: 5672
+    listener:
+      direct:
+        acknowledge-mode: manual
 server:
   address: 0.0.0.0
   port: 8103
@@ -73,5 +76,12 @@ ai:
 # 鱼聪明SDK
 yuapi:
   client:
-    access-key: xxx.xxx.xxx.xxx
-    secret-key: xxx.xxx.xxx.xxx
+    access-key: izvszyxh5ndyccuuhkxseft959h37idh
+    secret-key: ktek1dp71r257jqfpx173nv98xzwpbi9
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-shenzhen.aliyuncs.com
+      keyid: LTAI5tBj9ocdXKDcFmX3WneB
+      keysecret: XEfObytTy0bZfITyOqZAHxX0suskHs
+      bucketname: shierprojects

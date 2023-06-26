@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.shier.shierbi.model.dto.user.UserAddRequest;
 import com.shier.shierbi.model.dto.user.UserQueryRequest;
+import com.shier.shierbi.model.dto.user.UserRegisterRequest;
 import com.shier.shierbi.model.dto.user.UserUpdateMyRequest;
 import com.shier.shierbi.model.entity.User;
 import com.shier.shierbi.model.vo.LoginUserVO;
 import com.shier.shierbi.model.vo.UserVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,13 +23,17 @@ public interface UserService extends IService<User> {
 
     /**
      * 用户注册
-     *
-     * @param userAccount   用户账户
-     * @param userPassword  用户密码
-     * @param checkPassword 校验密码
-     * @return 新用户 id
+     * @param userRegisterRequest
+     * @return
      */
-    long userRegister(String userAccount, String userPassword, String checkPassword, String userCode);
+    long userRegister(UserRegisterRequest userRegisterRequest);
+
+    /**
+     * 用户注册
+     * @param userRegisterRequest
+     * @return
+     */
+    long userRegisterFile(UserRegisterRequest userRegisterRequest, MultipartFile file);
 
     /**
      * 用户登录
