@@ -21,8 +21,7 @@
 优化流程（异步化）：客户端输入分析诉求和原始数据，向业务后端发送请求。业务后端将请求事件放入消息队列，并为客户端生成取餐号，让要生成图表的客户端去排队，消息队列根据I服务负载情况，定期检查进度，如果AI服务还能处理更多的图表生成请求，就向任务处理模块发送消息。
 
 任务处理模块调用AI服务处理客户端数据，AI 服务异步生成结果返回给后端并保存到数据库，当后端的AI工服务生成完毕后，可以通过向前端发送通知的方式，或者通过业务后端监控数据库中图表生成服务的状态，来确定生成结果是否可用。若生成结果可用，前端即可获取并处理相应的数据，最终将结果返回给客户端展示。在此期间，用户可以去做自己的事情。
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/6dbf41e0-adfe-40cf-94da-f3db6c73b69d)
-
+![image](https://user-images.githubusercontent.com/94662685/248858431-6dbf41e0-adfe-40cf-94da-f3db6c73b69d.png)
 
 ## 项目技术栈
 ### 前端
@@ -50,26 +49,29 @@
 
 ## BI项目展示
 ### 用户登录注册
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/582c5b4f-7235-42f8-8b1f-3792a2494dae)
+![image](https://user-images.githubusercontent.com/94662685/248859299-3c3aa05e-813a-4b02-9399-86ef49469e86.png)
+
 
 ### 项目首页
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/2ee04e8e-d217-4e58-ae7f-293e5dbaaeb2)
+![image](https://github.com/kongshier/shierbi-backend/assets/94662685/2b4d936f-622c-4ec0-9b7d-27e7ed5b7503)
+
 
 ### 同步分析数据生成图表
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/26c602ee-c096-4fcc-b1b6-c9b9493d07c3)
+![image](https://user-images.githubusercontent.com/94662685/248860079-33574351-bbe4-4cb2-934a-3ffdcbb4cbf1.png)
+![](https://user-images.githubusercontent.com/94662685/248860034-3141343f-8a4e-4c1d-8236-382da9abe8b4.png)
 
 ### 异步分析数据生成图表
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/0dc3b178-e2df-4477-a66d-7fb71161fb25)
+![image](https://user-images.githubusercontent.com/94662685/248860258-2aa7c6ee-fe50-4cb1-982b-72fee4c1f526.png)
 
 ### 图表管理界面
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/50712f92-0127-4408-8f9b-15d17141078a)
+![image](https://user-images.githubusercontent.com/94662685/248860290-ff6642a7-a86e-4b1c-830b-12d6ca944b29.png)
 
 ### AI 问答助手
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/782d4982-24dc-4a51-acd8-99cb815e2bcc)
+![image](https://user-images.githubusercontent.com/94662685/248860583-e3aad1e7-ed4e-4506-aa69-e8b3f1d82046.png)
 
 ### AI 对话管理
 ![image](https://github.com/kongshier/shierbi-backend/assets/94662685/d9c41c51-4a21-458f-ac53-5f0247f71280)
 
 ### 用户信息
-![image](https://github.com/kongshier/shierbi-backend/assets/94662685/99e61f27-3560-4bd6-94c9-9e8283babbb6)
+![image](https://user-images.githubusercontent.com/94662685/248860609-8455b515-7f36-46cc-b512-707ad62d5f9a.png)
 
