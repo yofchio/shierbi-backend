@@ -27,12 +27,6 @@ public interface BiMqConstant {
      */
     String BI_DLX_ROUTING_KEY = "bi_dlx_routingKey";
 
-    /**
-     * 死信队列
-    // */
-    //String BI_DLX_EXCHANGE_NAME = "bi-dlx-exchange1";
-    //String BI_DLX_QUEUE_NAME = "bi_dlx_queue1";
-    //String BI_DLX_ROUTING_KEY = "bi_dlx_routingKey1";
 
     /**
      * AI 问答
@@ -46,7 +40,7 @@ public interface BiMqConstant {
     /**
      * MQ ip地址
      */
-    String BI_MQ_HOST = "8.134.37.7";
+    String BI_MQ_HOST = "xxxxx.xxxx.xxxx.xxx";
     /**
      * MQ 用户名
      */
@@ -54,6 +48,6 @@ public interface BiMqConstant {
     /**
      * MQ 密码
      */
-    String BI_MQ_PASSWORD = "kcsen123456";
+    String BI_MQ_PASSWORD = "xxx.xxx.xx.xx";
 
 }
