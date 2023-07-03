@@ -37,7 +37,6 @@ public class AiChatQuestion {
     @Resource
     private AiAssistantService aiAssistantService;
 
-
     @RabbitListener(
             bindings = @QueueBinding(value = @Queue(AI_QUESTION_QUEUE),
                     exchange = @Exchange(AI_QUESTION_EXCHANGE_NAME)

@@ -41,7 +41,6 @@ public class DlxDirectProducer {
             channel.queueDeclare(queueName2, true, false, false, null);
             channel.queueBind(queueName2, DLX_DIRECT_EXCHANGE, "waibao");
 
-
             // 老板队列监听机制
             DeliverCallback laobanDeliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "UTF-8");
@@ -63,7 +62,6 @@ public class DlxDirectProducer {
             });
             channel.basicConsume(queueName2, false, waibaoDeliverCallback, consumerTag -> {
             });
-
 
             Scanner scanner = new Scanner(System.in);
             while (scanner.hasNext()) {

@@ -8,7 +8,6 @@ import com.shier.shierbi.manager.AiManager;
 import com.shier.shierbi.model.entity.Chart;
 import com.shier.shierbi.model.enums.ChartStatusEnum;
 import com.shier.shierbi.service.ChartService;
-import com.shier.shierbi.utils.ChartUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -82,15 +81,34 @@ public class BiMqMessageConsumer {
         // 解析内容
         String[] splits = chartResult.split(GEN_CONTENT_SPLITS);
         if (splits.length < GEN_ITEM_NUM) {
-            //throw new BusinessException(ErrorCode.SYSTEM_ERROR, "");
+            // 拒绝消息
+            channel.basicNack(deliveryTag, false, false);
             chartService.handleChartUpdateError(chart.getId(), "AI生成错误");
             return;
         }
         // 生成前的内容
         String preGenChart = splits[GEN_CHART_IDX].trim();
+
+        if (StringUtils.isBlank(preGenChart)){
+            // 内容生成错误，拒绝消息
+            channel.basicNack(deliveryTag,false,false);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"AI生成错误");
+        }
+
+        // 判断是否包含有双引号，是否符合JSON格式
+        boolean flag = preGenChart.substring(0, 10).chars()
+                .mapToObj(c -> (char) c)
+                .anyMatch(c -> c == '"');
+
+        if (!flag){
+            // 内容生成错误，拒绝消息
+            channel.basicNack(deliveryTag,false,false);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"AI生成错误");
+        }
+
         String genResult = splits[GEN_RESULT_IDX].trim();
         // 生成后端检验
-        String validGenChart = ChartUtils.getValidGenChart(preGenChart);
+        //String validGenChart = ChartUtils.getValidGenChart(preGenChart);
 
         // 生成的最终结果-成功
         Chart updateChartResult = new Chart();
