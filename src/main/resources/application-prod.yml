@@ -1,7 +1,7 @@
 server:
   port: 8103
   servlet:
-    context-path: /api
+    context-path: 
     session:
       cookie:
         domain: bi.kongshier.top
@@ -11,7 +11,7 @@ spring:
   # DataSource Config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.134.37.7:3306/shierbi?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    url: jdbc:mysql://xxxxxxxxxxxxx:3306/shierbi?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password: shier
   # session 失效时间 30 天
@@ -21,14 +21,14 @@ spring:
   # redis配置
   redis:
     port: 6379
-    host: 8.134.37.7
+    host: xxxxxxxxxxxxx
     database: 1
-    password: kcsen281017
+    password: xxxxxxxxxxxxx
   # rabbitmq 信息
   rabbitmq:
-    host: 8.134.37.7
-    password: kcsen123456
-    username: shier
+    host: xxxxxxxxxxxxx
+    password: xxxxxxxxxxxxx
+    username: xxxxxxxxxxxxx
     port: 5672
     listener:
       direct:
@@ -44,12 +44,12 @@ ai:
 # 鱼聪明SDK
 yuapi:
   client:
-    access-key: izvszyxh5ndyccuuhkxseft959h37idh
-    secret-key: ktek1dp71r257jqfpx173nv98xzwpbi9
+    access-key: xxxxxxxxxxxxx
+    secret-key: xxxxxxxxxxxxx
 aliyun:
   oss:
     file:
-      endpoint: oss-cn-beijing.aliyuncs.com
-      keyid: LTAI5tDqVTD4RNi5n6NiGjFH
-      keysecret: aGzwOa5gQ942Z5ZXcU1BjmdoPxyU0N
-      bucketname: shierpartner
+      endpoint: xxxxxxxxxxxxx
+      keyid: xxxxxxxxxxxxx
+      keysecret: xxxxxxxxxxxxx
+      bucketname: xxxxxxxxxxxxx
